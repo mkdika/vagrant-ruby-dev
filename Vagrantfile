@@ -25,7 +25,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.box = "ubuntu/bionic64"
 
   # General configuration
-  config.vm.define "vagrant-rails-dev"
+  config.vm.define "vagrant-ruby-dev"
   config.vm.box_check_update = false
   config.ssh.forward_agent = true
   config.ssh.insert_key = false
@@ -50,7 +50,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # Virtualbox config
   config.vm.provider "virtualbox" do |vb, override|
 
-    vb.name = "vagrant_rails_dev_vm"
+    vb.name = "vagrant_ruby_dev_vm"
     vb.gui = false
 
     # Use VBoxManage to customize the VM. For example to change memory:
