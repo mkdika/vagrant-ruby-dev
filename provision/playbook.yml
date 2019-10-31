@@ -156,6 +156,7 @@
       shell: "{{ item }}"
       with_items:
         - "/bin/bash --login -c '/usr/share/rvm/bin/rvm install ruby-2.5.3 --default'"
+      become: true
       tags: ruby
 
     - name: Ruby - Update ruby bundler
@@ -169,8 +170,10 @@
       shell: "{{ item }}"
       with_items:
         - "/bin/bash --login -c '/usr/share/rvm/rubies/ruby-2.5.3/bin/bundle install'"
+        - "/bin/bash --login -c '/usr/share/rvm/rubies/ruby-2.5.3/bin/bundle update'"
       args:
         chdir: /vagrant
+      become_user: vagrant
       tags: ruby
       # END - Install Ruby 2.5
 
@@ -207,3 +210,4 @@
           - '|                                                  |'
           - '===================================================='
       become: no
+
