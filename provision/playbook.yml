@@ -4,8 +4,18 @@
   become: yes
   gather_facts: yes
 
-  tasks:
+  roles:
+    - role: rvm.ruby
+      rvm1_rubies: ['ruby-2.5.3']
+      rvm1_bundler_install: true
+      rvm1_install_flags: '--auto-dotfiles --user-install'
+      rvm1_install_path: "/home/vagrant/.rvm"
+      rvm1_user: 'vagrant'
+      sudo: yes
+      tags: ruby
 
+
+  tasks:
     - name: Install essential apps and tools
       apt:
         name: '{{ item }}'
@@ -26,7 +36,7 @@
 
       # Python3
       # =======
-    - name: Python3 - Install pip3 & Virtual env
+    - ame: Python3 - Install pip3 & Virtual env
       apt:
         name: '{{ item }}'
         force: yes
@@ -131,53 +141,6 @@
       tags: nodejs
       # END - Install Nodejs & Yarn
 
-
-      # RUBY 2.5
-      # ========
-    - name: Ruby - Add gpg key
-      shell: '{{ item }}'
-      become: true
-      with_items:
-        - "gpg --keyserver hkp://pool.sks-keyservers.net --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3 7D2BAF1CF37B13E2069D6956105BD0E739499BDB | bash"
-        - "apt-add-repository -y ppa:rael-gc/rvm"
-      tags: ruby
-
-    - name: Ruby - Install rvm
-      apt:
-        name: '{{ item }}'
-        state: present
-        update-cache: yes
-      become: true
-      with_items:
-        - rvm
-      tags: ruby
-
-    - name: Ruby - Install ruby 2.5.3
-      shell: "{{ item }}"
-      with_items:
-        - "/bin/bash --login -c '/usr/share/rvm/bin/rvm install ruby-2.5.3 --default'"
-      become: true
-      tags: ruby
-
-    - name: Ruby - Update ruby bundler
-      shell: "{{ item }}"
-      with_items:
-        - "/bin/bash --login -c '/usr/share/rvm/rubies/ruby-2.5.3/bin/gem update --system'"
-        - "/bin/bash --login -c '/usr/share/rvm/rubies/ruby-2.5.3/bin/gem install bundler'"
-      tags: ruby
-
-    - name: Ruby - Install Rails & Gems
-      shell: "{{ item }}"
-      with_items:
-        - "/bin/bash --login -c '/usr/share/rvm/rubies/ruby-2.5.3/bin/bundle install'"
-        - "/bin/bash --login -c '/usr/share/rvm/rubies/ruby-2.5.3/bin/bundle update'"
-      args:
-        chdir: /vagrant
-      become_user: vagrant
-      tags: ruby
-      # END - Install Ruby 2.5
-
-
       # Environment variable
     - name: Environment - Setup env variables
       lineinfile:
@@ -190,6 +153,7 @@
         - DATABASE_PASSWORD=
         - DATABASE_HOST=localhost
         - DATABASE_PORT=5432
+        - DATABASE_URL=postgres://postgres:@localhost:5432/rblog
       tags: env
       # END - Environment
 
@@ -210,4 +174,4 @@
           - '|                                                  |'
           - '===================================================='
       become: no
-
+n
