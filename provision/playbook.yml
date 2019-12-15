@@ -45,18 +45,6 @@
         - python3-pip
       become: yes
       tags: python3
-
-    - name: Python3 - Make python3 alias
-      blockinfile:
-        state: present
-        path: "/home/vagrant/.bashrc"
-        insertafter: EOF
-        block: |
-          alias python=python3
-          alias py=python3
-          alias pip=pip3
-      become: no
-      tags: python3
       # END - Python Utils ===============
 
 
@@ -158,12 +146,32 @@
       # END - Environment
 
 
+      # Custom Bashrc
+    - name: Custom alias
+      blockinfile:
+        state: present
+        path: "/home/vagrant/.bashrc"
+        insertafter: EOF
+        block: |
+          alias python=python3
+          alias py=python3
+          alias pip=pip3
+          alias rs='rails s -b 0.0.0.0'
+          alias rc='rails c'
+          alias rr='rails routes'
+          alias rdb='rails db'
+      become: no
+      tags: bashrc
+
     - name: Auto change dir to project root
       lineinfile:
         dest: "/home/vagrant/.bashrc"
         line: "cd /vagrant/"
         insertafter: EOF
       become: no
+      tags: bashrc
+      # END - Custom bashrc
+
 
     - name: Let them know
       debug:
